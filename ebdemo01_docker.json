@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "snpsuen/demo01:node-app01",
+    "Name": "snpsuen/ebdemo01:node-app01",
     "Update": "true"
   },
   "Ports": [

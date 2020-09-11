@@ -1,21 +1,31 @@
-resource "aws_elastic_beanstalk_application" "test_app" {
-  name        = "test-app"
-  description = "Test of CVS beanstalk deployment"
+resource "aws_s3_bucket" "${var.name}" {
+  bucket = ""${var.name}".applicationversion.bucket"
 }
 
-resource "aws_elastic_beanstalk_application_version" "%%VERSION_CLEAN%%" {
-  name        = "%%VERSION%%"
-  application = "${aws_elastic_beanstalk_application.test_app.name}"
-  description = "${aws_elastic_beanstalk_application.test_app.name}, version %%VERSION%%, using %%IMAGE%%"
-  bucket      = "%%EBS_BUCKET%%"
-  key         = "%%KEY%%"
+resource "aws_s3_bucket_object" "${var.name}" {
+  bucket = aws_s3_bucket."${var.name}".id
+  key    = "beanstalk/ebdemo01_node-app01.zip"
+  source = "ebdemo01_node-app01.zip"
 }
 
-resource "aws_elastic_beanstalk_environment" "test_env" {
-  name                = "test-env"
-  application         = "${aws_elastic_beanstalk_application.test_app.name}"
+resource "aws_elastic_beanstalk_application" "${var.name}" {
+  name        = "${var.name}_app"
+  description = "EB dem01 docker application"
+}
+
+resource "aws_elastic_beanstalk_application_version" "${var.name}" {
+  name        = "${var.name}_node-app01"
+  application = "$aws_elastic_beanstalk_application.${var.name}.name"
+  description = "application version created by terraform"
+  bucket      = "aws_s3_bucket.${var.name}.id"
+  key         = "aws_s3_bucket_object.${var.name}.id"
+}
+
+resource "aws_elastic_beanstalk_environment" "${var.name}" {
+  name                = "${var.environment}"
+  application         = "$aws_elastic_beanstalk_application.${var.name}.name"
   solution_stack_name = "64bit Amazon Linux 2016.09 v2.5.2 running Docker 1.12.6"
-  cname_prefix        = "${var.cname_prefix}-test-app"
+  cname_prefix        = "${var.cname_prefix}"
 
   # ..........................................................................
   # required settings

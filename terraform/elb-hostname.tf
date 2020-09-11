@@ -8,7 +8,7 @@
 
 # let's make it easy and figure out the zone ID by the zone itself
 data "aws_route53_zone" "myzone" {
-  name         = "ENTER_YOUR_ZONE_HERE."
+  name         = var.zonename
   private_zone = true
 }
 
@@ -17,12 +17,12 @@ data "aws_region" "current" {
 }
 
 resource "aws_route53_record" "www" {
-  zone_id = "${data.aws_route53_zone.myzone.zone_id}"
+  zone_id = data.aws_route53_zone.myzone.zone_id
   name    = "${var.app_dns_name}.${var.app_subdomain_name}.${data.aws_route53_zone.myzone.name}"
   type    = "A"
 
   alias {
-    name                   = "${aws_elastic_beanstalk_environment.test_env.cname}"
+    name                   = "aws_elastic_beanstalk_environment.${var.environment}.cname"
     zone_id                = "${var.elb_hosted_zones["${data.aws_region.current.name}"]}"
     evaluate_target_health = true
   }

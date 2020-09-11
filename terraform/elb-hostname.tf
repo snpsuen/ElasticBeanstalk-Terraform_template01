@@ -22,7 +22,7 @@ resource "aws_route53_record" "www" {
   type    = "A"
 
   alias {
-    name                   = "aws_elastic_beanstalk_environment.${var.environment}.cname"
+    name                   = "aws_elastic_beanstalk_environment.${var.name}.cname"
     zone_id                = "${var.elb_hosted_zones["${data.aws_region.current.name}"]}"
     evaluate_target_health = true
   }

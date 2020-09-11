@@ -1,9 +1,9 @@
 resource "aws_s3_bucket" "${var.name}" {
-  bucket = "${var.name}".applicationversion.bucket"
+  bucket = "${var.name}.applicationversion.bucket"
 }
 
 resource "aws_s3_bucket_object" "${var.name}" {
-  bucket = aws_s3_bucket."${var.name}".id
+  bucket = "aws_s3_bucket.${var.name}.id"
   key    = "beanstalk/ebdemo01_node-app01.zip"
   source = "ebdemo01_node-app01.zip"
 }
